@@ -1,6 +1,8 @@
-# HireHeaven - Modern Job Portal 🚀
+## 🎥 Live Preview
 
-![HireHeaven Dashboard](https://github.com/ashwanirai/hireheaven/assets/placeholder.png) <!-- Update with your actual screenshot URL later -->
+![Live Preview](https://img.shields.io/badge/Live%20Preview-Adding%20Soon-orange)
+
+# HireHeaven - Modern Job Portal 🚀
 
 HireHeaven is a comprehensive, microservices-based job portal platform designed to connect talented job seekers with top employers across India. It features a modern, responsive UI, secure authentication, real-time job listings, and a premium subscription model to boost candidate profiles.
 
