@@ -67,7 +67,7 @@ job-portal/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/hireheaven.git
+git clone https://github.com/ashurai1/hireheaven.git
 cd hireheaven
 ```
 
