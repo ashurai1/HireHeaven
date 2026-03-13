@@ -21,10 +21,14 @@ import {
   Edit,
   FileText,
   Mail,
+  MapPin,
   NotepadText,
   Phone,
   RefreshCcw,
   UserIcon,
+  Calendar,
+  Contact,
+  Home,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -38,6 +42,10 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [bio, setBio] = useState("");
+  const [dob, setDob] = useState("");
+  const [gender, setGender] = useState("");
+  const [currentLocation, setCurrentLocation] = useState("");
+  const [homeTown, setHomeTown] = useState("");
 
   const { updateProfilePic, updateResume, btnLoading, updateUser } =
     useAppData();
@@ -56,14 +64,18 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
   };
 
   const handleEditClick = () => {
-    editRef.current?.click();
     setName(user.name);
     setPhoneNumber(user.phone_number);
     setBio(user.bio || "");
+    setDob(user.date_of_birth || "");
+    setGender(user.gender || "");
+    setCurrentLocation(user.current_location || "");
+    setHomeTown(user.home_town || "");
+    editRef.current?.click();
   };
 
   const updateProfileHandler = () => {
-    updateUser(name, phoneNumber, bio);
+    updateUser(name, phoneNumber, bio, dob, gender, currentLocation, homeTown, user.institute_name, user.work_experience, user.education, user.internships);
   };
 
   const handleResumeClick = () => {
@@ -87,261 +99,179 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
   const router = useRouter();
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <Card className="overflow-hidden shadow-lg border-2">
-        <div className="h-32 bg-blue-500 relative">
-          <div className="absolute -bottom-16 left-8">
-            <div className="relative group">
-              <div className="w-32 h-32 rounded-full border-4 border-background overflow-hidden shadow-xl bg-background">
-                <img
-                  src={user.profile_pic ? user.profile_pic : "/user.png"}
-                  alt=""
-                  className="w-full h-full object-cover"
+    <div className="space-y-6">
+      {/* Profile Header Card */}
+      <Card className="p-6 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-white dark:bg-zinc-900">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+          <div className="relative group">
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-zinc-50 dark:border-zinc-800 overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+              <img
+                src={user.profile_pic ? user.profile_pic : "/user.png"}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {isYourAccount && (
+              <>
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  onClick={handleClick}
+                  className="absolute bottom-0 right-0 rounded-full h-8 w-8 shadow-md border border-zinc-200 dark:border-zinc-700 hover:scale-110 transition-transform"
+                >
+                  <Camera size={14} />
+                </Button>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  ref={inputRef}
+                  onChange={changeHandler}
                 />
-              </div>
+              </>
+            )}
+          </div>
 
-              {/* edit option for your profile pic */}
+          <div className="flex-1 text-center md:text-left space-y-3">
+            <div className="flex items-center justify-center md:justify-start gap-3">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{user.name}</h1>
+              {isYourAccount && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+                  onClick={handleEditClick}
+                >
+                  <Edit size={16} />
+                </Button>
+              )}
+            </div>
+            
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-sm font-medium">
+                <Briefcase size={14} />
+                <span className="capitalize">{user.institute_name || "Chandigarh Group of Colleges"}</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-sm font-medium">
+                <MapPin size={14} />
+                <span>{user.current_location || "Mohali, PB"}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* Personal Details Card */}
+      <Card className="p-8 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-white dark:bg-zinc-900">
+        <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+          Personal Details
+          {isYourAccount && (
+            <Button variant="ghost" size="sm" className="text-blue-500 hover:text-blue-600 h-auto p-0 font-bold ml-auto" onClick={handleEditClick}>
+              Update
+            </Button>
+          )}
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Email ID</p>
+            <p className="text-sm font-medium truncate">{user.email}</p>
+          </div>
+          
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Mobile Number</p>
+            <p className="text-sm font-medium">{user.phone_number}</p>
+          </div>
+          
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Date of Birth</p>
+            <p className="text-sm font-medium">{user.date_of_birth || "Not specified"}</p>
+          </div>
+          
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Gender</p>
+            <p className="text-sm font-medium capitalize">{user.gender || "Not specified"}</p>
+          </div>
+          
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Current Location</p>
+            <p className="text-sm font-medium">{user.current_location || "Not specified"}</p>
+          </div>
+          
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Home Town</p>
+            <p className="text-sm font-medium text-blue-500 cursor-pointer hover:underline font-bold">
+              {user.home_town || "Add Home Town"}
+            </p>
+          </div>
+        </div>
+      </Card>
+
+      {/* Resume Block */}
+      {user.role === "jobseeker" && (
+        <Card className={`p-6 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl ${!user.resume ? 'bg-zinc-50/50 dark:bg-zinc-800/10 border-dashed border-2' : 'bg-white dark:bg-zinc-900 border'}`}>
+          <div className="flex items-center gap-4">
+            <div className={`h-12 w-12 rounded-xl flex items-center justify-center border ${!user.resume ? 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700' : 'bg-red-50 dark:bg-red-950/30 border-red-100 dark:border-red-900/50'}`}>
+              <FileText size={24} className={!user.resume ? 'text-zinc-400' : 'text-red-500'} />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-bold text-sm">Resume</h4>
+              <p className="text-xs text-zinc-500">{user.resume ? "Updated recently" : "No resume uploaded yet"}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {user.resume && (
+                <a
+                  href={user.resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-full font-bold">
+                    View
+                  </Button>
+                </a>
+              )}
               {isYourAccount && (
                 <>
-                  <Button
-                    variant={"secondary"}
-                    size={"icon"}
-                    onClick={handleClick}
-                    className="absolute bottom-0 right-0 rounded-full h-10 w-10 shadow-lg"
-                  >
-                    <Camera size={18} />
+                  <Button onClick={handleResumeClick} variant={!user.resume ? "default" : "ghost"} size="sm" className={`h-9 font-bold ${user.resume ? 'text-blue-500 hover:text-blue-600' : ''}`}>
+                    {user.resume ? "Update" : "Upload Resume"}
                   </Button>
-
                   <input
                     type="file"
+                    ref={resumeRef}
                     className="hidden"
-                    accept="image/*"
-                    ref={inputRef}
-                    onChange={changeHandler}
+                    accept="application/pdf"
+                    onChange={changeResume}
                   />
                 </>
               )}
             </div>
           </div>
-        </div>
+        </Card>
+      )}
 
-        {/* Main content */}
-        <div className="pt-20 pb-8 px-8">
-          <div className="flex items-start justify-between flex-wrap gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold">{user.name}</h1>
-                {/* Edit button */}
-                {isYourAccount && (
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="h-8 w-8"
-                    onClick={handleEditClick}
-                  >
-                    <Edit size={16} />
-                  </Button>
-                )}
-              </div>
-
-              <div className="flex items-center gap-2 text-sm opacity-70">
-                <Briefcase size={16} />
-                <span className="capitalize">{user.role}</span>
-              </div>
-            </div>
+      {/* Subscription Block - simplified for sidebar feel */}
+      {isYourAccount && user.role === "jobseeker" && (
+        <Card className="p-6 bg-blue-600 text-white rounded-2xl shadow-lg border-none overflow-hidden relative group">
+          <Crown size={80} className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform" />
+          <div className="relative z-10">
+            <h4 className="font-bold text-lg mb-1 flex items-center gap-2">
+              Premium Duo
+              {user.subscription && new Date(user.subscription).getTime() > Date.now() && <CheckCircle2 size={16} className="text-blue-200" />}
+            </h4>
+            <p className="text-sm opacity-80 mb-4">Unlock double the hiring chances</p>
+            <Button 
+                variant="secondary" 
+                size="sm" 
+                className="w-full h-10 rounded-xl font-bold bg-white text-blue-600 hover:bg-blue-50"
+                onClick={() => router.push("/subscribe")}
+            >
+              {user.subscription && new Date(user.subscription).getTime() > Date.now() ? "View Plan" : "Get Premium"}
+            </Button>
           </div>
+        </Card>
+      )}
 
-          {/* Bio section */}
-          {user.role === "jobseeker" && user.bio && (
-            <div className="mt-6 p-4 rounded-lg border">
-              <div className="flex items-center gap-2 mb-2 text-sm font-medium opacity-70">
-                <FileText size={16} />
-                <span>About</span>
-              </div>
-              <p className="text-base leading-relaxed">{user.bio}</p>
-            </div>
-          )}
-
-          {/* Contact Info */}
-          <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Mail size={20} className="text-blue-600" />
-              Contact Information
-            </h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-3 p-4 rounded-lg border hover:border-blue-500 transition-colors">
-                <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                  <Mail size={18} className="text-blue-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs opacity-70 font-medium">Email</p>
-                  <p className="text-sm truncate">{user.email}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-4 rounded-lg border hover:border-blue-500 transition-colors">
-                <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                  <Phone size={18} className="text-blue-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs opacity-70 font-medium">Phone</p>
-                  <p className="text-sm truncate">{user.phone_number}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Resume section */}
-          {user.role === "jobseeker" && user.resume && (
-            <div className="mt-8">
-              <h2 className="text-lg font-semibold mt-4 flex items-center gap-2">
-                <NotepadText size={20} className="text-blue-600" />
-                Resume
-              </h2>
-
-              <div className="flex items-center gap-3 p-4 rounded-lg border hover:border-blue-500 transition-colors">
-                <div className="h-12 w-12 rounded-lg bg-red-100 dark:bg-red-900 flex items-center justify-center">
-                  <NotepadText size={20} className="text-red-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Resume Document</p>
-                  <a
-                    href={user.resume}
-                    className="text-sm text-blue-500 hover:underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View Resume PDF
-                  </a>
-                </div>
-                {/* edit button */}
-
-                <Button
-                  variant={"outline"}
-                  size={"sm"}
-                  onClick={handleResumeClick}
-                  className="gap-2"
-                >
-                  Update
-                </Button>
-                <input
-                  type="file"
-                  ref={resumeRef}
-                  className="hidden"
-                  accept="application/pdf"
-                  onChange={changeResume}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* subscription section */}
-          {isYourAccount && (
-            <>
-              {user.role === "jobseeker" && (
-                <div className="mt-8">
-                  <h2 className="text-lg font-semibold mt-4 flex items-center gap-2">
-                    <Crown size={20} className="text-blue-600" />
-                    Subscription Status
-                  </h2>
-
-                  <div className="p-6 rounded-lg bg-linear-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 to-purple-950/20 ">
-                    {!user.subscription ? (
-                      <>
-                        <div className="flex items-center justify-between flex-wrap gap-4">
-                          <div>
-                            <p className="font-semibold text-lg mb-1">
-                              No Active Subscription
-                            </p>
-                            <p className="text-sm opacity-70">
-                              Subscribe to unlock premium features and benefits
-                            </p>
-                          </div>
-                          <Button
-                            className="gap-2"
-                            onClick={() => router.push("/subscribe")}
-                          >
-                            <Crown size={18} />
-                            Subscribe Now
-                          </Button>
-                        </div>
-                      </>
-                    ) : new Date(user.subscription).getTime() > Date.now() ? (
-                      <div className="flex items-center justify-between flex-wrap gap-4">
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <CheckCircle2
-                              size={20}
-                              className="text-green-600"
-                            />
-                            <p className="font-semibold text-lg text-green-600">
-                              Active Subscription
-                            </p>
-                          </div>
-                          <p className="text-sm opacity-70">
-                            Valid until:{" "}
-                            {new Date(user.subscription).toLocaleDateString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              }
-                            )}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-700 text-white font-medium">
-                          <CheckCircle2 size={18} />
-                          Subcribed
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="flex items-center justify-between flex-wrap gap-4">
-                          <div>
-                            <div className="flex items-center gap-2 mb-2">
-                              <AlertTriangle
-                                size={20}
-                                className="text-red-600"
-                              />
-                              <p className="font-semibold text-lg text-red-600">
-                                Subscription Expired
-                              </p>
-                            </div>
-
-                            <p className="text-sm opacity-70">
-                              Expired On:{" "}
-                              {new Date(user.subscription).toLocaleDateString(
-                                "en-US",
-                                {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                }
-                              )}
-                            </p>
-                          </div>
-
-                          <Button
-                            variant={"destructive"}
-                            className="gap-2"
-                            onClick={() => router.push("/subscribe")}
-                          >
-                            <RefreshCcw size={18} />
-                            Renew Subscription
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </Card>
-
-      {/* Dialog box for edit */}
+      {/* Dialog box for edit - Moved outside of the main list for clarity */}
       <Dialog>
         <DialogTrigger asChild>
           <Button ref={editRef} variant={"outline"} className="hidden">
@@ -349,20 +279,16 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl">Edit profile</DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-5 py-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
             <div className="space-y-2">
-              <Label
-                htmlFor="name"
-                className="text-sm font-medium flex items-center gap-2"
-              >
+              <Label htmlFor="name" className="text-sm font-medium flex items-center gap-2">
                 <UserIcon size={16} /> Full Name
               </Label>
-
               <Input
                 id="name"
                 type="text"
@@ -374,13 +300,9 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
             </div>
 
             <div className="space-y-2">
-              <Label
-                htmlFor="phone"
-                className="text-sm font-medium flex items-center gap-2"
-              >
+              <Label htmlFor="phone" className="text-sm font-medium flex items-center gap-2">
                 <Phone size={16} /> Phone
               </Label>
-
               <Input
                 id="phone"
                 type="number"
@@ -391,37 +313,87 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
               />
             </div>
 
-            {user.role === "jobseeker" && (
-              <div className="space-y-2">
-                <Label
-                  htmlFor="bio"
-                  className="text-sm font-medium flex items-center gap-2"
-                >
-                  <FileText size={16} /> Bio
-                </Label>
+            <div className="space-y-2">
+              <Label htmlFor="dob" className="text-sm font-medium flex items-center gap-2">
+                <Calendar size={16} /> Date of Birth
+              </Label>
+              <Input
+                id="dob"
+                type="text"
+                placeholder="e.g. 15th Nov 2004"
+                className="h-11"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+              />
+            </div>
 
-                <Input
-                  id="bio"
-                  type="text"
-                  placeholder="Enter your Bio"
-                  className="h-11"
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                />
-              </div>
-            )}
+            <div className="space-y-2">
+              <Label htmlFor="gender" className="text-sm font-medium flex items-center gap-2">
+                <Contact size={16} /> Gender
+              </Label>
+              <Input
+                id="gender"
+                type="text"
+                placeholder="Male / Female / Other"
+                className="h-11"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              />
+            </div>
 
-            <DialogFooter>
-              <Button
-                disabled={btnLoading}
-                onClick={updateProfileHandler}
-                className="w-full h-11"
-                type="submit"
-              >
-                {btnLoading ? "Saving Changes..." : "Save changes"}
-              </Button>
-            </DialogFooter>
+            <div className="space-y-2">
+              <Label htmlFor="location" className="text-sm font-medium flex items-center gap-2">
+                <MapPin size={16} /> Current Location
+              </Label>
+              <Input
+                id="location"
+                type="text"
+                placeholder="e.g. Mohali, PB"
+                className="h-11"
+                value={currentLocation}
+                onChange={(e) => setCurrentLocation(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="hometown" className="text-sm font-medium flex items-center gap-2">
+                <Home size={16} /> Home Town
+              </Label>
+              <Input
+                id="hometown"
+                type="text"
+                placeholder="Enter your Home Town"
+                className="h-11"
+                value={homeTown}
+                onChange={(e) => setHomeTown(e.target.value)}
+              />
+            </div>
+
+            <div className="md:col-span-2 space-y-2">
+              <Label htmlFor="bio" className="text-sm font-medium flex items-center gap-2">
+                <FileText size={16} /> Bio
+              </Label>
+              <Input
+                id="bio"
+                type="text"
+                placeholder="Tell us about yourself"
+                className="h-11"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+              />
+            </div>
           </div>
+
+          <DialogFooter>
+            <Button
+              disabled={btnLoading}
+              onClick={updateProfileHandler}
+              className="w-full h-11"
+              type="submit"
+            >
+              {btnLoading ? "Saving Changes..." : "Save changes"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

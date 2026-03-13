@@ -15,6 +15,14 @@ interface User {
   profile_pic_public_id: string | null;
   skills: string[];
   subscription: string | null;
+  date_of_birth: string | null;
+  gender: string | null;
+  current_location: string | null;
+  home_town: string | null;
+  institute_name: string | null;
+  work_experience: any[];
+  education: any[];
+  internships: any[];
 }
 
 export interface AuthenticatedRequest extends Request {
@@ -52,6 +60,7 @@ export const isAuth = async (
 
     const users = await sql`
     SELECT u.user_id, u.name, u.email, u.phone_number, u.role, u.bio, u.resume, u.resume_public_id, u.profile_pic, u.profile_pic_public_id, u.subscription,
+    u.date_of_birth, u.gender, u.current_location, u.home_town, u.institute_name, u.work_experience, u.education, u.internships,
     ARRAY_AGG(s.name) FILTER (WHERE s.name IS NOT NULL) as skills
     FROM users u LEFT JOIN user_skills us ON u.user_id = us.user_id
     LEFT JOIN skills s ON us.skill_id = s.skill_id

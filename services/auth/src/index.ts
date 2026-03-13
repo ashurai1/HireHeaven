@@ -32,7 +32,7 @@ async function initDb() {
          user_id SERIAL PRIMARY KEY,
          name VARCHAR(255) NOT NULL,
          email VARCHAR(255) NOT NULL UNIQUE,
-         password VARCHAR(255) NOT NULL,
+         password VARCHAR(255),  -- Nullable for Google Sign-in
          phone_number VARCHAR(20) NOT NULL,
          role user_role NOT NULL,
          bio TEXT,
@@ -41,9 +41,14 @@ async function initDb() {
          profile_pic VARCHAR(255),
          profile_pic_public_id VARCHAR(255),
          created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-         subscription TIMESTAMPTZ
+         subscription TIMESTAMPTZ,
+         auth_provider VARCHAR(50) DEFAULT 'local'
       )
     `;
+
+    // Ensure the new auth_provider column exists for existing tables and password can be null
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(50) DEFAULT 'local';`;
+    await sql`ALTER TABLE users ALTER COLUMN password DROP NOT NULL;`;
 
     await sql`
      CREATE TABLE IF NOT EXISTS skills (

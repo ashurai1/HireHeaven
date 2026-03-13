@@ -18,6 +18,7 @@ export const getUserProfile = TryCatch(async (req, res, next) => {
 
   const users = await sql`
         SELECT u.user_id, u.name, u.email, u.phone_number, u.role, u.bio, u.resume, u.resume_public_id, u.profile_pic, u.profile_pic_public_id, u.subscription,
+        u.date_of_birth, u.gender, u.current_location, u.home_town, u.institute_name, u.work_experience, u.education, u.internships,
         ARRAY_AGG(s.name) FILTER (WHERE s.name IS NOT NULL) as skills
         FROM users u LEFT JOIN user_skills us ON u.user_id = us.user_id
         LEFT JOIN skills s ON us.skill_id = s.skill_id
@@ -44,17 +45,59 @@ export const updateUserProfile = TryCatch(
       throw new ErrorHandler(401, "Authentication required");
     }
 
-    const { name, phoneNumber, bio } = req.body;
+    const { name, phoneNumber, bio, dob, gender, currentLocation, homeTown, instituteName, workExperience, education, internships } = req.body;
 
-    const newName = name || user.name;
-    const newPhoneNumber = phoneNumber || user.phone_number;
-    const newBio = bio || user.bio;
+    const newName = name !== undefined ? name : user.name;
+    const newPhoneNumber = phoneNumber !== undefined ? phoneNumber : user.phone_number;
+    const newBio = bio !== undefined ? bio : user.bio;
+    const newDob = dob !== undefined ? dob : user.date_of_birth;
+    const newGender = gender !== undefined ? gender : user.gender;
+    const newCurrentLocation = currentLocation !== undefined ? currentLocation : user.current_location;
+    const newHomeTown = homeTown !== undefined ? homeTown : user.home_town;
+    const newInstituteName = instituteName !== undefined ? instituteName : user.institute_name;
+    
+    const newWorkExperience = workExperience !== undefined ? JSON.stringify(workExperience) : (user.work_experience ? JSON.stringify(user.work_experience) : '[]');
+    const newEducation = education !== undefined ? JSON.stringify(education) : (user.education ? JSON.stringify(user.education) : '[]');
+    const newInternships = internships !== undefined ? JSON.stringify(internships) : (user.internships ? JSON.stringify(user.internships) : '[]');
 
     const [updatedUser] = await sql`
-    UPDATE users SET name = ${newName}, phone_number = ${newPhoneNumber}, bio = ${newBio}
+    UPDATE users SET 
+      name = ${newName}, 
+      phone_number = ${newPhoneNumber}, 
+      bio = ${newBio}, 
+      date_of_birth = ${newDob}, 
+      gender = ${newGender}, 
+      current_location = ${newCurrentLocation}, 
+      home_town = ${newHomeTown}, 
+      institute_name = ${newInstituteName},
+      work_experience = ${newWorkExperience},
+      education = ${newEducation},
+      internships = ${newInternships}
     WHERE user_id = ${user.user_id}
-    RETURNING user_id, name, email, phone_number, bio
+    RETURNING user_id, name, email, phone_number, bio, date_of_birth, gender, current_location, home_town, institute_name, work_experience, education, internships
     `;
+
+    // Sync with new dedicated tables
+    if (education !== undefined) {
+      await sql`DELETE FROM user_education WHERE user_id = ${user.user_id}`;
+      for (const edu of education) {
+        await sql`INSERT INTO user_education (user_id, institute, degree, start_year, end_year) VALUES (${user.user_id}, ${edu.institute}, ${edu.degree}, ${edu.startYear}, ${edu.endYear})`;
+      }
+    }
+
+    if (workExperience !== undefined) {
+      await sql`DELETE FROM user_experience WHERE user_id = ${user.user_id}`;
+      for (const exp of workExperience) {
+        await sql`INSERT INTO user_experience (user_id, company, designation, start_date, end_date, location, description) VALUES (${user.user_id}, ${exp.company}, ${exp.designation}, ${exp.startDate}, ${exp.endDate}, ${exp.location}, ${exp.description})`;
+      }
+    }
+
+    if (internships !== undefined) {
+      await sql`DELETE FROM user_internships WHERE user_id = ${user.user_id}`;
+      for (const intern of internships) {
+        await sql`INSERT INTO user_internships (user_id, company, role, duration, description) VALUES (${user.user_id}, ${intern.company}, ${intern.role}, ${intern.duration}, ${intern.description})`;
+      }
+    }
 
     res.json({
       message: "Profile Updated successfully",

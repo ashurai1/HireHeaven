@@ -257,7 +257,7 @@ export const getAllActiveJobs = TryCatch(async (req, res) => {
 
 export const getSingleJob = TryCatch(async (req, res) => {
   const [job] =
-    await sql`SELECT * FROM jobs WHERE job_id = ${req.params.jobId}`;
+    await sql`SELECT j.*, c.name AS company_name, c.logo AS company_logo FROM jobs j JOIN companies c ON j.company_id = c.company_id WHERE j.job_id = ${req.params.jobId}`;
 
   res.json(job);
 });

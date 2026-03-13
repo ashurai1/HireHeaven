@@ -2,6 +2,8 @@ import { ArrowRight, Briefcase, Search, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
+import CompanyMarquee from "./CompanyMarquee";
+import AnimatedCounter from "./AnimatedCounter";
 
 const Hero = () => {
   return (
@@ -40,15 +42,21 @@ const Hero = () => {
             {/* stats */}
             <div className="flex flex-wrap justify-center md:justify-start gap-8 py-4">
               <div className="text-center md:text-left">
-                <p className="text-3xl font-bold text-blue-600">10k+</p>
+                <p className="text-3xl font-bold text-blue-600">
+                  <AnimatedCounter end={10} suffix="k+" />
+                </p>
                 <p className="text-sm opacity-70">Active Jobs</p>
               </div>
               <div className="text-center md:text-left">
-                <p className="text-3xl font-bold text-blue-600">5k+</p>
+                <p className="text-3xl font-bold text-blue-600">
+                  <AnimatedCounter end={5} suffix="k+" />
+                </p>
                 <p className="text-sm opacity-70">Companies</p>
               </div>
               <div className="text-center md:text-left">
-                <p className="text-3xl font-bold text-blue-600">50k+</p>
+                <p className="text-3xl font-bold text-blue-600">
+                  <AnimatedCounter end={50} suffix="k+" />
+                </p>
                 <p className="text-sm opacity-70">Job Seekers</p>
               </div>
             </div>
@@ -98,13 +106,16 @@ const Hero = () => {
                 <img
                   src="/hero.jpeg"
                   className="object-cover object-center w-full h-full transform transition-transform duration-500 group-hover:scale-105"
-                  alt=""
+                  alt="Job search celebration"
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Company logos marquee */}
+      <CompanyMarquee />
     </section>
   );
 };

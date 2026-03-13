@@ -5,12 +5,15 @@ import {
   registerUser,
   resetPassword,
 } from "../controllers/auth.js";
+import { googleLogin, googleRegister } from "../controllers/googleAuth.js";
 import uploadFile from "../middleware/multer.js";
 
 const router = express.Router();
 
 router.post("/register", uploadFile, registerUser);
 router.post("/login", loginUser);
+router.post("/google-login", googleLogin);
+router.post("/google-register", uploadFile, googleRegister);
 router.post("/forgot", forgotPassword);
 router.post("/reset/:token", resetPassword);
 

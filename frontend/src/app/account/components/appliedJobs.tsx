@@ -1,9 +1,11 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Application } from "@/type";
 import {
   Briefcase,
   CheckCircle2,
+  ChevronRight,
   Clock,
   DollarSign,
   Eye,
@@ -14,9 +16,13 @@ import React from "react";
 
 interface AppliedJobsProps {
   applications: Application[];
+  isSidebar?: boolean;
 }
 
-const AppliedJobs: React.FC<AppliedJobsProps> = ({ applications }) => {
+const AppliedJobs: React.FC<AppliedJobsProps> = ({
+  applications,
+  isSidebar,
+}) => {
   const getStatusConfig = (status: string) => {
     switch (status.toLowerCase()) {
       case "hired":
@@ -42,6 +48,47 @@ const AppliedJobs: React.FC<AppliedJobsProps> = ({ applications }) => {
         };
     }
   };
+  if (isSidebar) {
+    return (
+      <div className="space-y-4">
+        {applications && applications.length > 0 ? (
+          applications.slice(0, 3).map((a) => (
+            <div
+              key={a.application_id}
+              className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 hover:border-blue-500 transition-all cursor-pointer group"
+            >
+              <div className="h-10 w-10 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shrink-0">
+                <Briefcase size={18} className="text-zinc-500 group-hover:text-blue-500 transition-colors" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold truncate group-hover:text-blue-500 transition-colors">
+                  {a.job_title}
+                </p>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-zinc-500 truncate">
+                    {a.job_location}
+                  </span>
+                  <span className="h-1 w-1 rounded-full bg-zinc-300" />
+                  <span className="text-xs text-blue-500 font-medium capitalize">
+                    {a.status}
+                  </span>
+                </div>
+              </div>
+              <ChevronRight size={14} className="text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          ))
+        ) : (
+          <p className="text-sm text-zinc-500 text-center py-4">No applications yet</p>
+        )}
+        {applications.length > 3 && (
+          <Button variant="ghost" className="w-full text-xs text-blue-500 hover:text-blue-600 font-bold" onClick={() => window.scrollTo({ top: 1000, behavior: "smooth" })}>
+            View all applications ({applications.length})
+          </Button>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
       <Card className="shadow-lg border-2 overflow-hidden">

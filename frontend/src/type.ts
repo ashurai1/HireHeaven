@@ -64,6 +64,14 @@ export interface User {
   profile_pic_public_id: string | null;
   skills: string[];
   subscription: string | null;
+  date_of_birth?: string;
+  gender?: string;
+  current_location?: string;
+  home_town?: string;
+  institute_name?: string;
+  work_experience?: any[];
+  education?: any[];
+  internships?: any[];
 }
 
 export interface AppContextType {
@@ -77,7 +85,19 @@ export interface AppContextType {
   logoutUser: () => Promise<void>;
   updateProfilePic: (formData: any) => Promise<void>;
   updateResume: (formData: any) => Promise<void>;
-  updateUser: (name: string, phoneNumber: string, bio: string) => Promise<void>;
+  updateUser: (
+    name: string,
+    phoneNumber: string,
+    bio: string,
+    dob?: string,
+    gender?: string,
+    currentLocation?: string,
+    homeTown?: string,
+    instituteName?: string,
+    workExperience?: any[],
+    education?: any[],
+    internships?: any[]
+  ) => Promise<void>;
   addSkill: (
     skill: string,
     setSkill: React.Dispatch<React.SetStateAction<string>>
