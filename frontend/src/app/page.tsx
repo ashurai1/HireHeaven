@@ -6,6 +6,7 @@ import PopularSearches from "@/components/popular-searches";
 import TrendingRoles from "@/components/trending-roles";
 import EmployerCTA from "@/components/employer-cta";
 import ResumeAnalyzer from "@/components/resume-analyser";
+import AppDownloadCTA from "@/components/app-download-cta";
 import { useAppData } from "@/context/AppContext";
 import React from "react";
 
@@ -20,6 +21,7 @@ const Home = () => {
       <PopularSearches />
       <TrendingRoles />
       <EmployerCTA />
+      <AppDownloadCTA />
     </div>
   );
 };

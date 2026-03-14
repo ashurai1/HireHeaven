@@ -1,0 +1,19 @@
+{
+  "name": "job-portal-root",
+  "version": "1.0.0",
+  "description": "Root project for running all microservices and frontend",
+  "scripts": {
+    "start": "npm run dev:all",
+    "dev:all": "concurrently \"npm run dev --prefix services/auth\" \"npm run dev --prefix services/job\" \"npm run dev --prefix services/user\" \"npm run dev --prefix services/payment\" \"npm run dev --prefix services/utils\" \"npm run dev --prefix services/notification\" \"npm run dev --prefix frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:auth": "cd services/auth && npm start",
+    "dev:user": "cd services/user && npm start",
+    "dev:job": "cd services/job && npm start",
+    "dev:payment": "cd services/payment && npm start",
+    "dev:utils": "cd services/utils && npm start",
+    "install:all": "npm install && cd frontend && npm install --legacy-peer-deps && cd ../services/auth && npm install --legacy-peer-deps && cd ../user && npm install --legacy-peer-deps && cd ../job && npm install --legacy-peer-deps && cd ../payment && npm install --legacy-peer-deps && cd ../utils && npm install --legacy-peer-deps"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen flex flex-col bg-background/50">
-        <div className="fixed inset-0 -z-10 bg-background opacity-100 dark:opacity-[0.15]">
+        <div className="fixed inset-0 -z-10 bg-background opacity-100">
           <Squares 
             speed={0.5} 
             squareSize={40} 
@@ -33,8 +33,8 @@ export default function RootLayout({
         <AppProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="light"
+            forcedTheme="light"
             disableTransitionOnChange
           >
             <GoogleAuthProvider>

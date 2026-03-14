@@ -52,12 +52,14 @@ const AppliedJobs: React.FC<AppliedJobsProps> = ({
     return (
       <div className="space-y-4">
         {applications && applications.length > 0 ? (
-          applications.slice(0, 3).map((a) => (
-            <div
-              key={a.application_id}
-              className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 hover:border-blue-500 transition-all cursor-pointer group"
-            >
-              <div className="h-10 w-10 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shrink-0">
+          applications.slice(0, 3).map((a) => {
+            const statusConfig = getStatusConfig(a.status);
+            return (
+              <div
+                key={a.application_id}
+                className={`flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border ${statusConfig.border} hover:border-blue-500 transition-all cursor-pointer group`}
+              >
+                <div className="h-10 w-10 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shrink-0">
                 <Briefcase size={18} className="text-zinc-500 group-hover:text-blue-500 transition-colors" />
               </div>
               <div className="flex-1 min-w-0">
@@ -75,8 +77,9 @@ const AppliedJobs: React.FC<AppliedJobsProps> = ({
                 </div>
               </div>
               <ChevronRight size={14} className="text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
-            </div>
-          ))
+              </div>
+            );
+          })
         ) : (
           <p className="text-sm text-zinc-500 text-center py-4">No applications yet</p>
         )}
@@ -114,7 +117,7 @@ const AppliedJobs: React.FC<AppliedJobsProps> = ({
                 return (
                   <div
                     key={a.application_id}
-                    className="p-5 rounded-lg border-2 hover:border-blue-500 transition-all bg-background"
+                    className={`p-5 rounded-lg border-2 ${statusConfig.border} hover:border-blue-500 transition-all bg-background`}
                   >
                     <div className="flex items-start justify-between gap-4 flex-wrap">
                       <div className="flex-1 min-w-0">

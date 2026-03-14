@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { LogOut, Menu, User, X, ChevronDown, ChevronRight } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { ModeToggle } from "./mode-toggle";
 import { useAppData } from "@/context/AppContext";
 
 const NavBar = () => {
@@ -87,8 +86,8 @@ const NavBar = () => {
                <div className="absolute top-16 left-0 min-w-[200px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                  <div className="bg-white border border-gray-100 rounded-xl shadow-lg p-2 overflow-hidden">
                     <Link href={"/resume-builder"} className="block px-4 py-2.5 text-[14px] text-gray-700 hover:bg-gray-50 hover:text-green-700 rounded-lg transition-colors">Resume Builder</Link>
-                    <Link href={"/resume-builder"} className="block px-4 py-2.5 text-[14px] text-gray-700 hover:bg-gray-50 hover:text-green-700 rounded-lg transition-colors">Resume Templates</Link>
-                    <Link href={"/resume-builder"} className="block px-4 py-2.5 text-[14px] text-gray-700 hover:bg-gray-50 hover:text-green-700 rounded-lg transition-colors">Cover Letter</Link>
+                    <Link href={"/resume-templates"} className="block px-4 py-2.5 text-[14px] text-gray-700 hover:bg-gray-50 hover:text-green-700 rounded-lg transition-colors">Resume Templates</Link>
+                    <Link href={"/cover-letter"} className="block px-4 py-2.5 text-[14px] text-gray-700 hover:bg-gray-50 hover:text-green-700 rounded-lg transition-colors">Cover Letter</Link>
                  </div>
                </div>
             </div>
@@ -101,50 +100,54 @@ const NavBar = () => {
             ) : (
               <>
                 {isAuth ? (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        <Avatar className="h-9 w-9 ring-2 ring-offset-2 ring-offset-background ring-blue-500/20 cursor-pointer hover:ring-blue-500/40 transition-all">
-                          <AvatarImage
-                            src={user ? (user.profile_pic as string) : ""}
-                            alt={user ? user.name : ""}
-                          />
-                          <AvatarFallback className="bg-blue-100 dark:bg-blue-900 text-blue-600">
-                            {user?.name?.charAt(0).toUpperCase() || "U"}
-                          </AvatarFallback>
-                        </Avatar>
-                      </button>
-                    </PopoverTrigger>
+                  <>
 
-                    <PopoverContent className="w-56 p-2" align="end">
-                      <div className="px-3 py-2 mb-2 border-b">
-                        <p className="text-sm font-semibold">
-                          {user && user.name}
-                        </p>
-                        <p className="text-xs opacity-60 truncate">
-                          {user && user.email}
-                        </p>
-                      </div>
 
-                      <Link href={"/account"}>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                          <Avatar className="h-9 w-9 ring-2 ring-offset-2 ring-offset-background ring-blue-500/20 cursor-pointer hover:ring-blue-500/40 transition-all">
+                            <AvatarImage
+                              src={user ? (user.profile_pic as string) : ""}
+                              alt={user ? user.name : ""}
+                            />
+                            <AvatarFallback className="bg-blue-100 dark:bg-blue-900 text-blue-600">
+                              {user?.name?.charAt(0).toUpperCase() || "U"}
+                            </AvatarFallback>
+                          </Avatar>
+                        </button>
+                      </PopoverTrigger>
+
+                      <PopoverContent className="w-56 p-2" align="end">
+                        <div className="px-3 py-2 mb-2 border-b">
+                          <p className="text-sm font-semibold">
+                            {user && user.name}
+                          </p>
+                          <p className="text-xs opacity-60 truncate">
+                            {user && user.email}
+                          </p>
+                        </div>
+
+                        <Link href={"/account"}>
+                          <Button
+                            className="w-full justify-start gap-2"
+                            variant={"ghost"}
+                          >
+                            <User size={16} /> My Profile
+                          </Button>
+                        </Link>
+
                         <Button
-                          className="w-full justify-start gap-2"
+                          className="w-full justify-start gap-2 mt-1"
                           variant={"ghost"}
+                          onClick={logoutHandler}
                         >
-                          <User size={16} /> My Profile
+                          <LogOut size={16} />
+                          Logout
                         </Button>
-                      </Link>
-
-                      <Button
-                        className="w-full justify-start gap-2 mt-1"
-                        variant={"ghost"}
-                        onClick={logoutHandler}
-                      >
-                        <LogOut size={16} />
-                        Logout
-                      </Button>
-                    </PopoverContent>
-                  </Popover>
+                      </PopoverContent>
+                    </Popover>
+                  </>
                 ) : (
                   <Link href={"/login"}>
                     <Button className="gap-2">
@@ -155,12 +158,10 @@ const NavBar = () => {
                 )}
               </>
             )}
-            <ModeToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-3">
-            <ModeToggle />
 
             <button
               onClick={toggleMenu}
@@ -194,7 +195,13 @@ const NavBar = () => {
           </Link>
           
           <Link href={"/resume-builder"} onClick={toggleMenu} className="block px-4 py-3 text-[15px] font-medium text-gray-800 hover:bg-gray-50 hover:text-green-700 rounded-lg transition-colors">
-              Resume Tools
+              Resume Builder
+          </Link>
+          <Link href={"/resume-templates"} onClick={toggleMenu} className="block px-4 py-3 text-[15px] font-medium text-gray-800 hover:bg-gray-50 hover:text-green-700 rounded-lg transition-colors">
+              Resume Templates
+          </Link>
+          <Link href={"/cover-letter"} onClick={toggleMenu} className="block px-4 py-3 text-[15px] font-medium text-gray-800 hover:bg-gray-50 hover:text-green-700 rounded-lg transition-colors">
+              Cover Letter
           </Link>
 
           <div className="border-t my-2 pt-2 border-gray-100"></div>

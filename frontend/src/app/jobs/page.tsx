@@ -3,6 +3,7 @@ import { Job } from "@/type";
 import React, { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { job_service, useAppData } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -70,8 +71,12 @@ const JobsPage = () => {
       );
 
       setJobs(data);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to load jobs. Is the backend running?"
+      );
     } finally {
       setLoading(false);
     }

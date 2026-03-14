@@ -422,7 +422,7 @@ const ExperienceSections: React.FC<ExperienceSectionsProps> = ({ user, isYourAcc
               disabled={btnLoading}
               className="w-full h-14 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black text-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all shadow-xl shadow-zinc-200 dark:shadow-none"
             >
-              {btnLoading ? "Savng..." : "Save Details"}
+              {btnLoading ? "Saving..." : "Save Details"}
             </Button>
           </DialogFooter>
         </DialogContent>

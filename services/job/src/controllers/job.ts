@@ -120,7 +120,7 @@ export const createJob = TryCatch(async (req: AuthenticatedRequest, res) => {
   }
 
   const [company] =
-    await sql`SELECT company_id FROM companies WHERE company_id = ${company_id} AND recruiter_id = ${user.user_id}`;
+    await sql`SELECT company_id, name FROM companies WHERE company_id = ${company_id} AND recruiter_id = ${user.user_id}`;
 
   if (!company) {
     throw new ErrorHandler(404, "Company not found");
@@ -128,6 +128,8 @@ export const createJob = TryCatch(async (req: AuthenticatedRequest, res) => {
 
   const [newJob] =
     await sql`INSERT INTO jobs (title, description, salary, location, role, job_type, work_location, company_id, posted_by_recuriter_id, openings) VALUES (${title}, ${description}, ${salary}, ${location}, ${role}, ${job_type}, ${work_location}, ${company_id}, ${user.user_id}, ${openings}) RETURNING *`;
+
+
 
   res.json({
     message: "Job posted successfully",
@@ -339,6 +341,8 @@ export const updateApplication = TryCatch(
     publishToTopic("send-mail", message).catch((error) => {
       console.error("Failed to publish message to kafka", error);
     });
+
+
 
     res.json({
       message: "Application updated",
