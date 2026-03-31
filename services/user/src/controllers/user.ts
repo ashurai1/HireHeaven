@@ -126,26 +126,32 @@ export const updateProfilePic = TryCatch(
 
     const fileBuffer = getBuffer(file);
 
-    if (!fileBuffer || !fileBuffer.content) {
-      throw new ErrorHandler(500, "failed to generate buffer");
+    console.log("Uploading profile pic for user:", user.user_id);
+    console.log("Upload URL:", `${process.env.UPLOAD_SERVICE}/api/utils/upload`);
+
+    try {
+      const { data: uploadResult } = await axios.post(
+        `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
+        {
+          buffer: fileBuffer.content,
+          public_id: oldPublicId,
+        }
+      );
+
+      console.log("Upload successful, updating database...");
+
+      const [updatedUser] = await sql`
+      UPDATE users SET profile_pic = ${uploadResult.url}, profile_pic_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id, name, profile_pic;
+      `;
+
+      res.json({
+        message: "profile pic updated",
+        updatedUser,
+      });
+    } catch (error: any) {
+      console.error("Error during profile pic upload/update:", error.response?.data || error.message);
+      throw error;
     }
-
-    const { data: uploadResult } = await axios.post(
-      `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-      {
-        buffer: fileBuffer.content,
-        public_id: oldPublicId,
-      }
-    );
-
-    const [updatedUser] = await sql`
-    UPDATE users SET profile_pic = ${uploadResult.url}, profile_pic_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id, name, profile_pic;
-    `;
-
-    res.json({
-      message: "profile pic updated",
-      updatedUser,
-    });
   }
 );
 
@@ -170,22 +176,32 @@ export const updateResume = TryCatch(async (req: AuthenticatedRequest, res) => {
     throw new ErrorHandler(500, "failed to generate buffer");
   }
 
-  const { data: uploadResult } = await axios.post(
-    `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-    {
-      buffer: fileBuffer.content,
-      public_id: oldPublicId,
+    console.log("Uploading resume for user:", user.user_id);
+    console.log("Upload URL:", `${process.env.UPLOAD_SERVICE}/api/utils/upload`);
+
+    try {
+      const { data: uploadResult } = await axios.post(
+        `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
+        {
+          buffer: fileBuffer.content,
+          public_id: oldPublicId,
+        }
+      );
+
+      console.log("Resume upload successful, updating database...");
+
+      const [updatedUser] = await sql`
+      UPDATE users SET resume = ${uploadResult.url}, resume_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id, name, resume;
+      `;
+
+      res.json({
+        message: "Resume updated",
+        updatedUser,
+      });
+    } catch (error: any) {
+      console.error("Error during resume upload/update:", error.response?.data || error.message);
+      throw error;
     }
-  );
-
-  const [updatedUser] = await sql`
-    UPDATE users SET resume = ${uploadResult.url}, resume_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id, name, resume;
-    `;
-
-  res.json({
-    message: "Resume updated",
-    updatedUser,
-  });
 });
 
 export const addSkillToUser = TryCatch(

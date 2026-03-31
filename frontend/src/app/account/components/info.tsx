@@ -98,15 +98,17 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
 
   const router = useRouter();
 
+  const isSubscribed = user.subscription && new Date(user.subscription).getTime() > Date.now();
+
   return (
     <div className="space-y-6">
       {/* Profile Header Card */}
-      <Card className="p-6 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-white dark:bg-zinc-900">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+      <Card className="p-6 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 border-none">
+        <div className="flex items-center gap-4">
           <div className="relative group">
-            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-zinc-50 dark:border-zinc-800 overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+            <div className="w-20 h-20 rounded-full border border-zinc-100 dark:border-zinc-800 overflow-hidden bg-zinc-100 dark:bg-zinc-800">
               <img
-                src={user.profile_pic ? user.profile_pic : "/user.png"}
+                src={user.profile_pic || "/user.png"}
                 alt=""
                 className="w-full h-full object-cover"
               />
@@ -117,9 +119,9 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
                   variant="secondary"
                   size="icon"
                   onClick={handleClick}
-                  className="absolute bottom-0 right-0 rounded-full h-8 w-8 shadow-md border border-zinc-200 dark:border-zinc-700 hover:scale-110 transition-transform"
+                  className="absolute bottom-0 right-0 rounded-full h-7 w-7 shadow-md border border-zinc-200 dark:border-zinc-700 hover:scale-110 transition-transform bg-white text-zinc-600"
                 >
-                  <Camera size={14} />
+                  <Camera size={12} />
                 </Button>
                 <input
                   type="file"
@@ -132,28 +134,24 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
             )}
           </div>
 
-          <div className="flex-1 text-center md:text-left space-y-3">
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{user.name}</h1>
-              {isYourAccount && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
-                  onClick={handleEditClick}
-                >
-                  <Edit size={16} />
-                </Button>
+          <div className="flex-1 space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-xl font-bold text-zinc-900 dark:text-white capitalize">{user.name}</h1>
+              {isSubscribed && (
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800">
+                  <Crown size={10} className="text-emerald-600 dark:text-emerald-400 fill-emerald-600 dark:fill-emerald-400" />
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight">Subscribed</span>
+                </div>
               )}
             </div>
             
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-sm font-medium">
-                <Briefcase size={14} />
-                <span className="capitalize">{user.institute_name || "Chandigarh Group of Colleges"}</span>
+            <div className="space-y-1">
+              <div className="flex items-center gap-1.5 text-zinc-500 text-[13px]">
+                <Briefcase size={14} className="text-zinc-400" />
+                <span>{user.institute_name || "Chandigarh Group of Colleges"}</span>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-sm font-medium">
-                <MapPin size={14} />
+              <div className="flex items-center gap-1.5 text-zinc-500 text-[13px]">
+                <MapPin size={14} className="text-zinc-400" />
                 <span>{user.current_location || "Mohali, PB"}</span>
               </div>
             </div>
@@ -162,45 +160,47 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
       </Card>
 
       {/* Personal Details Card */}
-      <Card className="p-8 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-white dark:bg-zinc-900">
-        <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-          Personal Details
+      <Card className="p-6 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-white dark:bg-zinc-900 border-none">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200">
+            Personal Details
+          </h3>
           {isYourAccount && (
-            <Button variant="ghost" size="sm" className="text-blue-500 hover:text-blue-600 h-auto p-0 font-bold ml-auto" onClick={handleEditClick}>
-              Update
+            <Button variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-700 h-auto p-0 font-bold flex items-center gap-1" onClick={handleEditClick}>
+              <Edit size={14} /> Edit
             </Button>
           )}
-        </h3>
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-5">
           <div className="space-y-1">
-            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Email ID</p>
-            <p className="text-sm font-medium truncate">{user.email}</p>
+            <p className="text-[11px] font-medium text-zinc-400 uppercase tracking-tight">Email ID</p>
+            <p className="text-[13px] font-semibold text-zinc-700 truncate">{user.email}</p>
           </div>
           
           <div className="space-y-1">
-            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Mobile Number</p>
-            <p className="text-sm font-medium">{user.phone_number}</p>
+            <p className="text-[11px] font-medium text-zinc-400 uppercase tracking-tight">Mobile Number</p>
+            <p className="text-[13px] font-semibold text-zinc-700">{user.phone_number}</p>
           </div>
           
           <div className="space-y-1">
-            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Date of Birth</p>
-            <p className="text-sm font-medium">{user.date_of_birth || "Not specified"}</p>
+            <p className="text-[11px] font-medium text-zinc-400 uppercase tracking-tight">Date of Birth</p>
+            <p className="text-[13px] font-semibold text-zinc-700">{user.date_of_birth || "Add DOB"}</p>
           </div>
           
           <div className="space-y-1">
-            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Gender</p>
-            <p className="text-sm font-medium capitalize">{user.gender || "Not specified"}</p>
+            <p className="text-[11px] font-medium text-zinc-400 uppercase tracking-tight">Gender</p>
+            <p className="text-[13px] font-semibold text-zinc-700 capitalize">{user.gender || "Add Gender"}</p>
           </div>
           
           <div className="space-y-1">
-            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Current Location</p>
-            <p className="text-sm font-medium">{user.current_location || "Not specified"}</p>
+            <p className="text-[11px] font-medium text-zinc-400 uppercase tracking-tight">Current Location</p>
+            <p className="text-[13px] font-semibold text-zinc-700">{user.current_location || "Add Location"}</p>
           </div>
           
           <div className="space-y-1">
-            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Home Town</p>
-            <p className="text-sm font-medium text-blue-500 cursor-pointer hover:underline font-bold">
+            <p className="text-[11px] font-medium text-zinc-400 uppercase tracking-tight">Home Town</p>
+            <p className="text-[13px] font-semibold text-zinc-700">
               {user.home_town || "Add Home Town"}
             </p>
           </div>
@@ -209,67 +209,50 @@ const Info: React.FC<AccontProps> = ({ user, isYourAccount }) => {
 
       {/* Resume Block */}
       {user.role === "jobseeker" && (
-        <Card className={`p-6 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl ${!user.resume ? 'bg-zinc-50/50 dark:bg-zinc-800/10 border-dashed border-2' : 'bg-white dark:bg-zinc-900 border'}`}>
-          <div className="flex items-center gap-4">
-            <div className={`h-12 w-12 rounded-xl flex items-center justify-center border ${!user.resume ? 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700' : 'bg-red-50 dark:bg-red-950/30 border-red-100 dark:border-red-900/50'}`}>
-              <FileText size={24} className={!user.resume ? 'text-zinc-400' : 'text-red-500'} />
+        <Card className={`p-4 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-2xl ${!user.resume ? 'bg-zinc-50 border-dashed border' : 'bg-white border-none'}`}>
+          <div className="flex items-center gap-3">
+            <div className={`h-10 w-10 rounded-xl flex items-center justify-center border ${!user.resume ? 'bg-zinc-100 border-zinc-200' : 'bg-red-50 border-red-100'}`}>
+              <FileText size={20} className={!user.resume ? 'text-zinc-400' : 'text-red-500'} />
             </div>
             <div className="flex-1">
-              <h4 className="font-bold text-sm">Resume</h4>
-              <p className="text-xs text-zinc-500">{user.resume ? "Updated recently" : "No resume uploaded yet"}</p>
+              <h4 className="font-bold text-[13px]">Resume</h4>
+              <p className="text-[11px] text-zinc-500">{user.resume ? "Updated recently" : "Not uploaded yet"}</p>
             </div>
             <div className="flex items-center gap-2">
               {user.resume && (
-                <a
-                  href={user.resume}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-full font-bold">
-                    View
-                  </Button>
+                <a href={user.resume} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className="h-8 px-3 rounded-xl font-bold text-xs">View</Button>
                 </a>
               )}
               {isYourAccount && (
-                <>
-                  <Button onClick={handleResumeClick} variant={!user.resume ? "default" : "ghost"} size="sm" className={`h-9 font-bold ${user.resume ? 'text-blue-500 hover:text-blue-600' : ''}`}>
-                    {user.resume ? "Update" : "Upload Resume"}
-                  </Button>
-                  <input
-                    type="file"
-                    ref={resumeRef}
-                    className="hidden"
-                    accept="application/pdf"
-                    onChange={changeResume}
-                  />
-                </>
+                <Button onClick={handleResumeClick} variant="ghost" size="sm" className="h-8 text-emerald-600 hover:text-emerald-700 font-bold text-xs p-0">
+                  {user.resume ? "Update" : "Upload"}
+                </Button>
               )}
+              <input type="file" ref={resumeRef} className="hidden" accept="application/pdf" onChange={changeResume} />
             </div>
           </div>
         </Card>
       )}
 
-      {/* Subscription Block - simplified for sidebar feel */}
-      {isYourAccount && user.role === "jobseeker" && (
-        <Card className="p-6 bg-blue-600 text-white rounded-2xl shadow-lg border-none overflow-hidden relative group">
-          <Crown size={80} className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform" />
-          <div className="relative z-10">
-            <h4 className="font-bold text-lg mb-1 flex items-center gap-2">
-              Premium Duo
-              {user.subscription && new Date(user.subscription).getTime() > Date.now() && <CheckCircle2 size={16} className="text-blue-200" />}
-            </h4>
-            <p className="text-sm opacity-80 mb-4">Unlock double the hiring chances</p>
-            <Button 
-                variant="secondary" 
-                size="sm" 
-                className="w-full h-10 rounded-xl font-bold bg-white text-blue-600 hover:bg-blue-50"
-                onClick={() => router.push("/subscribe")}
-            >
-              {user.subscription && new Date(user.subscription).getTime() > Date.now() ? "View Plan" : "Get Premium"}
-            </Button>
+      {/* Subscription Card */}
+      <Card className="p-4 bg-gradient-to-br from-indigo-600 to-blue-700 text-white rounded-2xl shadow-md border-none overflow-hidden relative group">
+        <Crown size={60} className="absolute -right-2 -bottom-2 opacity-10 group-hover:scale-110 transition-transform" />
+        <div className="relative z-10 space-y-3">
+          <div>
+            <h4 className="font-bold text-sm flex items-center gap-2">Premium Duo</h4>
+            <p className="text-[11px] opacity-80">Unlock 2x more hiring chances</p>
           </div>
-        </Card>
-      )}
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className={`w-full h-9 rounded-xl font-bold text-[12px] ${isSubscribed ? 'bg-emerald-500 text-white hover:bg-emerald-600 border-none' : 'bg-white text-blue-600 hover:bg-blue-50'}`}
+              onClick={() => router.push("/subscribe")}
+            >
+              {isSubscribed ? "Subscribed (Active)" : "Get Premium"}
+            </Button>
+        </div>
+      </Card>
 
       {/* Dialog box for edit - Moved outside of the main list for clarity */}
       <Dialog>

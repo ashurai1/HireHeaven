@@ -24,23 +24,22 @@ const AccountPage = () => {
   return (
     <>
       {user && (
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2.5fr] gap-8 items-start">
+        <div className="max-w-7xl mx-auto px-4 py-8 bg-[#f4f7f9] min-h-screen">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.8fr] gap-6 items-start">
             {/* Left Sidebar */}
-            <div className="space-y-6 sticky top-8">
+            <div className="space-y-6">
               <Info user={user} isYourAccount={true} />
-              {user.role === "jobseeker" && (
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
-                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                    My Activities
-                  </h3>
-                  <AppliedJobs applications={applications} isSidebar={true} />
+              
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold">My Activities</h3>
                 </div>
-              )}
+                <AppliedJobs applications={applications} isSidebar={true} />
+              </div>
             </div>
 
             {/* Right Main Content */}
-            <div className="space-y-8">
+            <div className="space-y-6">
               {user.role === "jobseeker" && (
                 <>
                   <ExperienceSections user={user} isYourAccount={true} />
@@ -50,6 +49,11 @@ const AccountPage = () => {
               {user.role === "recruiter" && <Company />}
             </div>
           </div>
+          {user.role === "jobseeker" && (
+            <div id="applied-jobs-section" className="mt-6">
+              <AppliedJobs applications={applications} />
+            </div>
+          )}
         </div>
       )}
     </>

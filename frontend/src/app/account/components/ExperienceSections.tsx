@@ -98,17 +98,12 @@ const ExperienceSections: React.FC<ExperienceSectionsProps> = ({ user, isYourAcc
   return (
     <div className="space-y-6">
       {/* Education Section */}
-      <Card className="p-8 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-white dark:bg-zinc-900 transition-all hover:shadow-md">
-        <div className="flex items-center justify-between mb-8">
-          <h3 className="text-xl font-bold flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-orange-50 dark:bg-orange-950/30">
-              <GraduationCap className="text-orange-500" size={22} />
-            </div>
-            Education
-          </h3>
+      <Card className="p-6 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-white dark:bg-zinc-900 border-none">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-base font-bold text-zinc-800">Education</h3>
           {isYourAccount && (
-            <Button onClick={() => handleOpenDialog("education")} variant="outline" size="sm" className="rounded-full font-bold border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800">
-              <Plus size={16} className="mr-1" /> Add
+            <Button onClick={() => handleOpenDialog("education")} variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-700 h-auto p-0 font-bold flex items-center gap-1">
+              <Plus size={16} /> Add
             </Button>
           )}
         </div>
@@ -117,48 +112,40 @@ const ExperienceSections: React.FC<ExperienceSectionsProps> = ({ user, isYourAcc
           {user.education && user.education.length > 0 ? (
             user.education.map((edu, index) => (
               <div key={index} className="flex gap-4 group relative">
-                <div className="relative z-10">
-                  <div className="h-10 w-10 rounded-full bg-orange-50 dark:bg-orange-950/30 flex items-center justify-center border border-orange-100 dark:border-orange-900/30">
-                    <GraduationCap size={20} className="text-orange-500" />
-                  </div>
+                <div className="h-10 w-10 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-100 dark:border-zinc-700">
+                  <GraduationCap size={20} className="text-zinc-400" />
                 </div>
-                <div className="flex-1 space-y-1 pb-4 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
+                <div className="flex-1 space-y-1 pb-4 border-b border-zinc-50 last:border-0 dark:border-zinc-800">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-bold text-base">{edu.institute || "Institution Name"}</h4>
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400 font-medium">{edu.degree}</p>
+                      <h4 className="font-bold text-sm text-zinc-900">{edu.degree}</h4>
+                      <p className="text-xs text-zinc-500 font-medium">{edu.institute}</p>
                     </div>
                     {isYourAccount && (
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button onClick={() => handleOpenDialog("education", index)} variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"><Pencil size={14}/></Button>
-                        <Button onClick={() => handleDelete("education", index)} variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-red-500"><Trash2 size={14}/></Button>
-                      </div>
+                      <Button onClick={() => handleOpenDialog("education", index)} variant="ghost" size="sm" className="h-auto p-0 text-emerald-600 hover:text-emerald-700 font-bold text-xs flex items-center gap-1">
+                        <Pencil size={12} /> Edit
+                      </Button>
                     )}
                   </div>
-                  <p className="text-xs text-zinc-500 font-bold tracking-tight bg-zinc-100 dark:bg-zinc-800 w-fit px-2 py-0.5 rounded-md">{edu.startYear} - {edu.endYear || "Present"}</p>
+                  <p className="text-[11px] text-zinc-400 font-medium">{edu.startYear} - {edu.endYear || "Present"}</p>
                 </div>
               </div>
             ))
           ) : (
-             <div className="flex flex-col items-center justify-center py-6 text-center space-y-2 bg-zinc-50/50 dark:bg-zinc-800/20 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-700">
-                <p className="text-sm font-bold text-zinc-400">No education details added yet</p>
-             </div>
+            <div className="p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-800/20 border border-dashed border-zinc-200 flex items-center justify-center py-8">
+               <p className="text-xs font-bold text-zinc-400">No education details added yet</p>
+            </div>
           )}
         </div>
       </Card>
 
       {/* Work Experience Section */}
-      <Card className="p-8 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-white dark:bg-zinc-900 transition-all hover:shadow-md">
-        <div className="flex items-center justify-between mb-8">
-          <h3 className="text-xl font-bold flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/30">
-              <Briefcase className="text-blue-500" size={22} />
-            </div>
-            Work Experience
-          </h3>
+      <Card className="p-6 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-white dark:bg-zinc-900 border-none">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-base font-bold text-zinc-800">Work Experience</h3>
           {isYourAccount && (
-            <Button onClick={() => handleOpenDialog("experience")} variant="outline" size="sm" className="rounded-full font-bold border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800">
-              <Plus size={16} className="mr-1" /> Add
+            <Button onClick={() => handleOpenDialog("experience")} variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-700 h-auto p-0 font-bold flex items-center gap-1">
+              <Plus size={16} /> Add
             </Button>
           )}
         </div>
@@ -167,58 +154,51 @@ const ExperienceSections: React.FC<ExperienceSectionsProps> = ({ user, isYourAcc
           {user.work_experience && user.work_experience.length > 0 ? (
             user.work_experience.map((exp, index) => (
               <div key={index} className="flex gap-4 group relative">
-                <div className="relative z-10">
-                  <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center border border-blue-100 dark:border-blue-900/30">
-                    <Briefcase size={20} className="text-blue-500" />
-                  </div>
+                <div className="h-10 w-10 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-100 dark:border-zinc-700">
+                  <Briefcase size={20} className="text-zinc-400" />
                 </div>
-                <div className="flex-1 space-y-1 pb-4 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
+                <div className="flex-1 space-y-1 pb-4 border-b border-zinc-50 last:border-0 dark:border-zinc-800">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-bold text-base">{exp.company}</h4>
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400 font-medium">{exp.designation}</p>
+                      <h4 className="font-bold text-sm text-zinc-900">{exp.designation}</h4>
+                      <p className="text-xs text-zinc-500 font-medium">{exp.company}</p>
                     </div>
                     {isYourAccount && (
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button onClick={() => handleOpenDialog("experience", index)} variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"><Pencil size={14}/></Button>
-                        <Button onClick={() => handleDelete("experience", index)} variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-red-500"><Trash2 size={14}/></Button>
-                      </div>
+                      <Button onClick={() => handleOpenDialog("experience", index)} variant="ghost" size="sm" className="h-auto p-0 text-emerald-600 hover:text-emerald-700 font-bold text-xs flex items-center gap-1">
+                        <Pencil size={12} /> Edit
+                      </Button>
                     )}
                   </div>
-                  <div className="flex items-center gap-3">
-                    <p className="text-xs text-zinc-500 font-bold tracking-tight bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">{exp.startDate} - {exp.endDate || "Present"}</p>
-                    {exp.location && <p className="text-xs text-zinc-400 flex items-center gap-1"><MapPin size={10}/> {exp.location}</p>}
-                  </div>
-                  {exp.description && <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">{exp.description}</p>}
+                  <p className="text-[11px] text-zinc-400 font-medium">{exp.startDate} - {exp.endDate || "Present"}</p>
                 </div>
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center py-10 text-center space-y-3 bg-zinc-50/50 dark:bg-zinc-800/20 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-700">
-              <div className="p-4 rounded-full bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800">
-                <Briefcase size={32} className="text-zinc-300" />
+            <div className="p-6 rounded-2xl bg-emerald-50/10 dark:bg-emerald-950/20 border border-emerald-50 dark:border-emerald-900/20 flex gap-4 items-start">
+              <div className="h-10 w-10 rounded-xl bg-white dark:bg-zinc-900 shadow-sm border border-emerald-100 flex items-center justify-center shrink-0">
+                <Briefcase size={20} className="text-emerald-500" />
               </div>
-              <div className="max-w-[200px]">
-                <p className="text-sm font-bold">Add your work experience</p>
-                <p className="text-xs text-zinc-500">60% of recruiters look for work history</p>
+              <div className="flex-1 space-y-3">
+                <div className="space-y-1">
+                  <h4 className="font-bold text-sm text-zinc-800">Have you started working yet?</h4>
+                  <p className="text-xs text-zinc-500 leading-relaxed">You have not added any experience since completing your education.</p>
+                </div>
+                <Button onClick={() => handleOpenDialog("experience")} variant="outline" size="sm" className="h-8 rounded-full border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-bold px-4 text-xs">
+                  Add Experience
+                </Button>
               </div>
             </div>
           )}
         </div>
       </Card>
 
-      {/* Internships Section */}
-      <Card className="p-8 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-white dark:bg-zinc-900 transition-all hover:shadow-md">
-        <div className="flex items-center justify-between mb-8">
-          <h3 className="text-xl font-bold flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/30">
-              <Award className="text-purple-500" size={22} />
-            </div>
-            Internships
-          </h3>
+      {/* Internship Section */}
+      <Card className="p-6 border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl bg-white dark:bg-zinc-900 border-none">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-base font-bold text-zinc-800">Internship</h3>
           {isYourAccount && (
-            <Button onClick={() => handleOpenDialog("internship")} variant="outline" size="sm" className="rounded-full font-bold border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800">
-              <Plus size={16} className="mr-1" /> Add
+            <Button onClick={() => handleOpenDialog("internship")} variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-700 h-auto p-0 font-bold flex items-center gap-1">
+              <Plus size={16} /> Add
             </Button>
           )}
         </div>
@@ -227,40 +207,28 @@ const ExperienceSections: React.FC<ExperienceSectionsProps> = ({ user, isYourAcc
           {user.internships && user.internships.length > 0 ? (
             user.internships.map((intern, index) => (
               <div key={index} className="flex gap-4 group relative">
-                <div className="relative z-10">
-                  <div className="h-10 w-10 rounded-full bg-purple-50 dark:bg-purple-950/30 flex items-center justify-center border border-purple-100 dark:border-purple-900/30">
-                    <Award size={20} className="text-purple-500" />
-                  </div>
+                <div className="h-10 w-10 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-100 dark:border-zinc-700">
+                  <Briefcase size={20} className="text-zinc-400" />
                 </div>
-                <div className="flex-1 space-y-1 pb-4 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
+                <div className="flex-1 space-y-1 pb-4 border-b border-zinc-50 last:border-0 dark:border-zinc-800">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-bold text-base">{intern.company}</h4>
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400 font-medium">{intern.role}</p>
+                      <h4 className="font-bold text-sm text-zinc-900">{intern.role}</h4>
+                      <p className="text-xs text-zinc-500 font-medium">{intern.company}</p>
                     </div>
                     {isYourAccount && (
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button onClick={() => handleOpenDialog("internship", index)} variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"><Pencil size={14}/></Button>
-                        <Button onClick={() => handleDelete("internship", index)} variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-red-500"><Trash2 size={14}/></Button>
-                      </div>
+                      <Button onClick={() => handleOpenDialog("internship", index)} variant="ghost" size="sm" className="h-auto p-0 text-emerald-600 hover:text-emerald-700 font-bold text-xs flex items-center gap-1">
+                        <Pencil size={12} /> Edit
+                      </Button>
                     )}
                   </div>
-                  <div className="flex items-center gap-3">
-                    <p className="text-xs text-zinc-500 font-bold tracking-tight bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">{intern.duration}</p>
-                  </div>
-                  {intern.description && <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">{intern.description}</p>}
+                  <p className="text-[11px] text-zinc-400 font-medium">{intern.duration}</p>
                 </div>
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center py-10 text-center space-y-3 bg-zinc-50/50 dark:bg-zinc-800/20 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-700">
-              <div className="p-4 rounded-full bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800">
-                <Award size={32} className="text-zinc-300" />
-              </div>
-              <div className="max-w-[200px]">
-                <p className="text-sm font-bold">Add your internships</p>
-                <p className="text-xs text-zinc-500">Stand out with practical exposure</p>
-              </div>
+            <div className="p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-800/20 border border-dashed border-zinc-200 flex items-center justify-center py-8">
+               <p className="text-xs font-bold text-zinc-400">No internships added yet</p>
             </div>
           )}
         </div>

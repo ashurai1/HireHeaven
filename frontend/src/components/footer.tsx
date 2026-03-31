@@ -33,8 +33,8 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <h4 className="font-bold text-lg mb-2">Legal</h4>
             <ul className="flex flex-col gap-3 text-sm text-muted-foreground">
-              <li><Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link href="#" className="hover:text-primary transition-colors">User Terms & Conditions</Link></li>
+              <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">User Terms & Conditions</Link></li>
             </ul>
           </div>
 
@@ -119,10 +119,10 @@ const Footer = () => {
           <div className="mt-12 pt-8 border-t border-sky-200 dark:border-sky-800 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] md:text-xs text-sky-900/40 dark:text-sky-100/40 font-bold uppercase tracking-widest">
              <p>© {new Date().getFullYear()} HireHeaven | All rights reserved</p>
              <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-                <Link href="#" className="hover:text-sky-600 transition-colors">Privacy Policy</Link>
-                <Link href="#" className="hover:text-sky-600 transition-colors">T&C</Link>
-                <Link href="#" className="hover:text-sky-600 transition-colors">Rewards T&C</Link>
-                <Link href="#" className="hover:text-sky-600 transition-colors">AI Prep T&C</Link>
+                <Link href="/privacy-policy" className="hover:text-sky-600 transition-colors">Privacy Policy</Link>
+                <Link href="/terms-conditions" className="hover:text-sky-600 transition-colors">T&C</Link>
+                <Link href="/rewards-terms" className="hover:text-sky-600 transition-colors">Rewards T&C</Link>
+                <Link href="/ai-prep-terms" className="hover:text-sky-600 transition-colors">AI Prep T&C</Link>
                 <p className="text-sky-800">Created by Ashwani Rai</p>
              </div>
           </div>

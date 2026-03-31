@@ -6,12 +6,11 @@ import toast, { Toaster } from "react-hot-toast";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-export const utils_service = "http://localhost:5001";
-export const auth_service = "http://localhost:5005";
-export const user_service = "http://localhost:5002";
-export const job_service = "http://localhost:5003";
-export const payment_service = "http://localhost:5004";
-
+export const utils_service = "http://127.0.0.1:5001";
+export const auth_service = "http://127.0.0.1:5005";
+export const user_service = "http://127.0.0.1:5002";
+export const job_service = "http://127.0.0.1:5003";
+export const payment_service = "http://127.0.0.1:5004";
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -91,36 +90,12 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   }
 
-  async function updateUser(
-    name: string,
-    phoneNumber: string,
-    bio: string,
-    dob?: string,
-    gender?: string,
-    currentLocation?: string,
-    homeTown?: string,
-    instituteName?: string,
-    workExperience?: any[],
-    education?: any[],
-    internships?: any[]
-  ) {
+  async function updateUser(name: string, phoneNumber: string, bio: string) {
     setBtnLoading(true);
     try {
       const { data } = await axios.put(
         `${user_service}/api/user/update/profile`,
-        {
-          name,
-          phoneNumber,
-          bio,
-          dob,
-          gender,
-          currentLocation,
-          homeTown,
-          instituteName,
-          workExperience,
-          education,
-          internships,
-        },
+        { name, phoneNumber, bio },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -130,9 +105,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       toast.success(data.message);
       fetchUser();
     } catch (error: any) {
-      toast.error(
-        error.response?.data?.message || error.message || "An error occurred"
-      );
+      toast.error(error.response?.data?.message || error.message || "An error occurred");
     } finally {
       setBtnLoading(false);
     }
@@ -212,7 +185,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [applications, setApplications] = useState<Application[]>([]);
 
-
   async function fetchApplications() {
     try {
       const { data } = await axios.get(
@@ -230,14 +202,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   }
 
-
-
   useEffect(() => {
     fetchUser();
     fetchApplications();
-  }, [token]);
-
-
+  }, []);
 
   return (
     <AppContext.Provider

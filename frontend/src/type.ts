@@ -106,7 +106,6 @@ export interface AppContextType {
   applyJob: (job_id: number) => Promise<void>;
   applications: Application[];
   fetchApplications: () => Promise<void>;
-  fetchApplications: () => Promise<void>;
 }
 
 

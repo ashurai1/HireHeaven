@@ -13,6 +13,7 @@ export const TryCatch =
     try {
       await controller(req, res, next);
     } catch (error: any) {
+      console.error("Error in controller:", error);
       if (error instanceof ErrorHandler) {
         return res.status(error.statusCode).json({
           message: error.message,

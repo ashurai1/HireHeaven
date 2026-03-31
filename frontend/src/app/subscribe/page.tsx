@@ -22,61 +22,82 @@ const SubscriptionPage = () => {
 
   const handleSubscribe = async () => {
     const token = Cookies.get("token");
+    
+    if (!token) {
+      toast.error("Please log in first");
+      return;
+    }
+
     setLoading(true);
-    const {
-      data: { order },
-    } = await axios.post(
-      `${payment_service}/api/payment/checkout`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const options = {
-      key: "rzp_test_RaL8PDo9YBejEW", // Replace with your Razorpay key_id
-      amount: order.id, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      currency: "INR",
-      name: "Hire Heaven",
-      description: "Find job easily",
-      ...(order.id.startsWith("mock_order_") ? {} : { order_id: order.id }), // Omit order_id if it's a mock order so Razorpay opens in simple mode
-      handler: async function (response: any) {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-          response;
-
-        try {
-          const { data } = await axios.post(
-            `${payment_service}/api/payment/verify`,
-            {
-              razorpay_order_id: razorpay_order_id || order.id, // fallback to order.id if mock 
-              razorpay_payment_id,
-              razorpay_signature
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          toast.success(data.message);
-          setUser(data.updatedUser);
-          router.push(`/payment/success/${razorpay_payment_id}`);
-          setLoading(false);
-        } catch (error: any) {
-          setLoading(false);
-          toast.error(error.response.data.message);
+    
+    try {
+      const {
+        data: { order },
+      } = await axios.post(
+        `${payment_service}/api/payment/checkout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      },
-      theme: {
-        color: "#F37254",
-      },
-    };
-    if (!razorpayLoaded) console.log("some thing went wrong with script");
-    const razorpay = new window.Razorpay(options);
-    razorpay.open();
+      );
+
+      const options = {
+        key: "rzp_test_RaL8PDo9YBejEW", // Replace with your Razorpay key_id
+        amount: order.id, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        currency: "INR",
+        name: "Hire Heaven",
+        description: "Find job easily",
+        ...(order.id.startsWith("mock_order_") ? {} : { order_id: order.id }), // Omit order_id if it's a mock order so Razorpay opens in simple mode
+        handler: async function (response: any) {
+          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+            response;
+
+          try {
+            const { data } = await axios.post(
+              `${payment_service}/api/payment/verify`,
+              {
+                razorpay_order_id: razorpay_order_id || order.id, // fallback to order.id if mock 
+                razorpay_payment_id,
+                razorpay_signature
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            toast.success(data.message);
+            setUser(data.updatedUser);
+            router.push(`/payment/success/${razorpay_payment_id}`);
+            setLoading(false);
+          } catch (error: any) {
+            setLoading(false);
+            const errorMessage = error.response?.data?.message || error.message || "Payment verification failed";
+            toast.error(errorMessage);
+          }
+        },
+        theme: {
+          color: "#F37254",
+        },
+      };
+      
+      if (!razorpayLoaded) {
+        toast.error("Payment system not loaded. Please refresh and try again.");
+        setLoading(false);
+        return;
+      }
+      
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error: any) {
+      setLoading(false);
+      const errorMessage = error.response?.data?.message || error.message || "Failed to initiate payment";
+      toast.error(errorMessage);
+      console.error("Payment error:", error);
+    }
   };
 
   if (loading) return <Loading />;
