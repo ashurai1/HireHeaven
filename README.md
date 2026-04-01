@@ -1,6 +1,6 @@
 ## 🎥 Live Preview
 
-[![Live Preview](https://img.shields.io/badge/Live%20Preview-Adding%20Soon-orange)](https://drive.google.com/file/d/1qQUIrXFno4cKQa6S_l4pYG4lDSzn1mhG/view?t=1.822)
+[![Watch Demo](https://img.shields.io/badge/Watch%20Demo-Available-orange)](https://drive.google.com/file/d/1qQUIrXFno4cKQa6S_l4pYG4lDSzn1mhG/view?t=1.822)
 
 # HireHeaven - Modern Job Portal 🚀
 
